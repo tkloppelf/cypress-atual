@@ -1,12 +1,14 @@
 import userData from '../fixtures/user-data.json'
+import loginPage from '../pages/login'
+import dashboard from '../pages/dashboard'
+
+
+const login = new loginPage()
+const dashboardPage = new dashboard()
 
 describe('Orange HRM Tests', () => {
 
 const selectorList = {
-  usernameField: '[name="username"]',
-  passwordField: '[name="password"]',
-  loginButton: '.oxd-button',
-  myInfoButton: '.oxd-topbar-header-breadcrumb > .oxd-text',
   firstNameField: '[name="firstName"]',
   lastNameField: '[name="lastName"]',
   employeeId: ':nth-child(1) > :nth-child(1) > .oxd-input-group > :nth-child(2) > .oxd-input',
@@ -18,14 +20,17 @@ const selectorList = {
 }
 
   it.only('User Info Updtade - Sucess', () => {
-    cy.visit('/auth/login')
-    cy.get(selectorList.usernameField).type(userData.userSucess.username)
-    cy.get(selectorList.passwordField).type(userData.userSucess.password)
-    cy.get(selectorList.loginButton).click()
-    cy.location('pathname').should('equal', '/web/index.php/dashboard/index')
-    cy.get('.oxd-topbar-header-breadcrumb > .oxd-text').contains("Dashboard")
+    login.acessLoginPage()
+    login.loginWithUser(userData.userSucess.username, userData.userSucess.password)
+
+    dashboardPage.checkDashboardPage()
+    //cy.get(selectorList.usernameField).type(userData.userSucess.username)
+    //cy.get(selectorList.passwordField).type(userData.userSucess.password)
+    //cy.get(selectorList.loginButton).click()
+    //cy.location('pathname').should('equal', '/web/index.php/dashboard/index')
+    //cy.get('.oxd-topbar-header-breadcrumb > .oxd-text').contains("Dashboard")
     cy.get(':nth-child(6) > .oxd-main-menu-item').click()
-    cy.get(selectorList.myInfoButton).click()
+    //cy.get(selectorList.myInfoButton).click()
     cy.get(selectorList.firstNameField).clear().type('First name')
     cy.get(selectorList.lastNameField).clear().type('Last name')
     cy.get(selectorList.employeeId).clear().type('Employee')
@@ -33,6 +38,11 @@ const selectorList = {
     cy.get(selectorList.driveNumber).clear().type('21125')
     cy.get(selectorList.licenseExpire).clear().type('2025-09-23')
     cy.get(selectorList.closeButton).click()
+    cy.get(':nth-child(5) > :nth-child(1) > :nth-child(1) > .oxd-input-group > :nth-child(2) > .oxd-select-wrapper > .oxd-select-text > .oxd-select-text--after > .oxd-icon').click()
+    cy.get('.oxd-select-dropdown > :nth-child(12)').click()
+    cy.get(':nth-child(2) > .oxd-input-group > :nth-child(2) > .oxd-select-wrapper > .oxd-select-text > .oxd-select-text--after > .oxd-icon').click()
+    cy.get(':nth-child(3) > span').click()
+    cy.get(':nth-child(1) > :nth-child(2) > .oxd-radio-wrapper > label').click()
     cy.get(selectorList.saveButton).click()
 
 
